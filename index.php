@@ -384,29 +384,32 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer">
     <style>
         :root {
-            --bg-body: #0a0e17;
-            --bg-card: #151c2c;
-            --bg-card-hover: #1a2436;
-            --bg-header: rgba(10, 14, 23, 0.95);
-            --primary: #6366f1;
-            --primary-hover: #4f46e5;
-            --primary-glow: rgba(99, 102, 241, 0.3);
-            --accent: #a855f7;
-            --accent-glow: rgba(168, 85, 247, 0.3);
-            --text-main: #f1f5f9;
-            --text-sec: #8892a8;
-            --text-muted: #5c6578;
-            --border: #252d3d;
-            --border-light: #2d3748;
-            --danger: #ef4444;
-            --danger-glow: rgba(239, 68, 68, 0.3);
-            --success: #10b981;
-            --success-glow: rgba(16, 185, 129, 0.3);
-            --warning: #f59e0b;
-            --radius: 16px;
-            --radius-sm: 10px;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+            --bg-body: #030712;
+            --bg-card: #0f1629;
+            --bg-card-hover: #161d33;
+            --bg-header: rgba(3, 7, 18, 0.85);
+            --primary: #818cf8;
+            --primary-hover: #6366f1;
+            --primary-glow: rgba(129, 140, 248, 0.35);
+            --accent: #c084fc;
+            --accent-glow: rgba(192, 132, 252, 0.35);
+            --cyan: #22d3ee;
+            --cyan-glow: rgba(34, 211, 238, 0.3);
+            --text-main: #f8fafc;
+            --text-sec: #94a3b8;
+            --text-muted: #64748b;
+            --border: #1e293b;
+            --border-light: #334155;
+            --danger: #f87171;
+            --danger-glow: rgba(248, 113, 113, 0.35);
+            --success: #34d399;
+            --success-glow: rgba(52, 211, 153, 0.35);
+            --warning: #fbbf24;
+            --radius: 20px;
+            --radius-sm: 12px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            --shadow-glow: 0 0 40px var(--primary-glow);
         }
 
         * {
@@ -417,10 +420,11 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
 
         body {
             background-color: var(--bg-body);
-            background-image: 
-                radial-gradient(ellipse at 0% 0%, rgba(99, 102, 241, 0.08) 0px, transparent 50%),
-                radial-gradient(ellipse at 100% 0%, rgba(168, 85, 247, 0.06) 0px, transparent 50%),
-                radial-gradient(ellipse at 50% 100%, rgba(99, 102, 241, 0.04) 0px, transparent 50%);
+            background-image:
+                radial-gradient(ellipse at 0% 0%, rgba(129, 140, 248, 0.12) 0px, transparent 50%),
+                radial-gradient(ellipse at 100% 0%, rgba(192, 132, 252, 0.1) 0px, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(34, 211, 238, 0.05) 0px, transparent 60%),
+                radial-gradient(ellipse at 50% 100%, rgba(129, 140, 248, 0.08) 0px, transparent 50%);
             background-attachment: fixed;
             color: var(--text-main);
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -438,14 +442,21 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
             width: 100%;
             z-index: 100;
             background: var(--bg-header);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border);
-            padding: 1rem 0;
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 0.875rem 0;
+            transition: all 0.3s ease;
+        }
+
+        header.scrolled {
+            padding: 0.625rem 0;
+            background: rgba(3, 7, 18, 0.95);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1440px;
             margin: 0 auto;
             padding: 0 1.5rem;
         }
@@ -454,32 +465,39 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 20px; 
-            flex-wrap: wrap; 
+            gap: 20px;
+            flex-wrap: wrap;
         }
 
         .logo {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             font-weight: 700;
             color: white;
             text-decoration: none;
             display: flex;
             align-items: center;
             gap: 12px;
-            transition: transform 0.2s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             flex-shrink: 0;
         }
 
         .logo:hover {
-            transform: scale(1.02);
+            transform: scale(1.03);
+            filter: drop-shadow(0 0 20px var(--primary-glow));
         }
 
         .logo i {
-            font-size: 1.3rem;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
+            font-size: 1.4rem;
+            background: linear-gradient(135deg, var(--primary), var(--cyan), var(--accent));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            animation: logoShimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes logoShimmer {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.2); }
         }
 
         .logo span {
@@ -492,7 +510,7 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
         .header-controls {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             flex-shrink: 0;
         }
 
@@ -500,14 +518,21 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
             display: flex;
             align-items: center;
             gap: 10px;
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.1));
-            padding: 8px 16px;
+            background: linear-gradient(135deg, rgba(129, 140, 248, 0.12), rgba(192, 132, 252, 0.12));
+            padding: 10px 18px;
             border-radius: 99px;
             font-size: 0.9rem;
             color: var(--text-main);
-            border: 1px solid var(--border);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             font-weight: 500;
             white-space: nowrap;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .user-pill:hover {
+            background: linear-gradient(135deg, rgba(129, 140, 248, 0.2), rgba(192, 132, 252, 0.2));
+            border-color: rgba(255, 255, 255, 0.15);
         }
 
         .user-pill i {
@@ -519,90 +544,125 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
             align-items: center;
             justify-content: center;
             gap: 8px;
-            padding: 10px 20px;
+            padding: 11px 22px;
             border-radius: var(--radius-sm);
             font-size: 0.9rem;
-            font-weight: 500;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             border: none;
             text-decoration: none;
             white-space: nowrap;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .btn:hover::before {
+            opacity: 1;
         }
 
         .btn-primary {
             background: linear-gradient(135deg, var(--primary), var(--accent));
             color: white;
-            box-shadow: 0 4px 15px var(--primary-glow);
+            box-shadow: 0 4px 20px var(--primary-glow), inset 0 1px 0 rgba(255,255,255,0.2);
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px var(--primary-glow);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 30px var(--primary-glow), inset 0 1px 0 rgba(255,255,255,0.3);
         }
 
         .btn-primary:active {
-            transform: translateY(0);
+            transform: translateY(-1px) scale(1);
         }
 
         .btn-icon {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
+            background: rgba(15, 22, 41, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             color: var(--text-sec);
-            width: 42px;
-            height: 42px;
+            width: 44px;
+            height: 44px;
             padding: 0;
             border-radius: var(--radius-sm);
+            backdrop-filter: blur(10px);
         }
 
         .btn-icon:hover {
-            background: var(--bg-card-hover);
+            background: rgba(129, 140, 248, 0.15);
             color: white;
             border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px var(--primary-glow);
         }
 
         .btn-icon.logout:hover {
             color: var(--danger);
             border-color: var(--danger);
-            background: rgba(239, 68, 68, 0.1);
+            background: rgba(248, 113, 113, 0.15);
+            box-shadow: 0 4px 15px var(--danger-glow);
         }
 
         .dashboard-grid {
             display: grid;
-            grid-template-columns: 1fr 380px;
-            gap: 1.5rem;
+            grid-template-columns: 1fr 400px;
+            gap: 1.75rem;
             margin: 2rem 0;
         }
 
         .upload-area {
-            background: var(--bg-card);
-            border: 2px dashed var(--border);
+            background: linear-gradient(145deg, rgba(15, 22, 41, 0.6), rgba(15, 22, 41, 0.9));
+            border: 2px dashed rgba(129, 140, 248, 0.3);
             border-radius: var(--radius);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 3rem 2rem;
+            padding: 3.5rem 2rem;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
+            backdrop-filter: blur(10px);
         }
 
         .upload-area::before {
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(135deg, var(--primary-glow), var(--accent-glow));
+            background: linear-gradient(135deg, var(--primary-glow), var(--cyan-glow), var(--accent-glow));
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.4s ease;
+        }
+
+        .upload-area::after {
+            content: '';
+            position: absolute;
+            inset: -50%;
+            background: conic-gradient(from 0deg, transparent, var(--primary), var(--cyan), var(--accent), transparent);
+            opacity: 0;
+            animation: borderRotate 4s linear infinite;
+            transition: opacity 0.4s ease;
+        }
+
+        @keyframes borderRotate {
+            to { transform: rotate(360deg); }
         }
 
         .upload-area:hover,
         .upload-area.dragover {
-            border-color: var(--primary);
-            transform: translateY(-3px);
+            border-color: transparent;
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(129, 140, 248, 0.15);
         }
 
         .upload-area:hover::before,
@@ -610,72 +670,103 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
             opacity: 1;
         }
 
+        .upload-area:hover::after,
+        .upload-area.dragover::after {
+            opacity: 0.3;
+        }
+
         .upload-area > * {
             position: relative;
-            z-index: 1;
+            z-index: 2;
         }
 
         .upload-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, var(--primary), var(--cyan), var(--accent));
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 10px 30px var(--primary-glow);
+            margin-bottom: 1.75rem;
+            box-shadow: 0 15px 40px var(--primary-glow);
+            animation: iconFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
         }
 
         .upload-icon i {
-            font-size: 2rem;
+            font-size: 2.25rem;
             color: white;
         }
 
         .upload-area h3 {
             margin: 0 0 0.5rem 0;
             font-weight: 600;
-            font-size: 1.25rem;
+            font-size: 1.35rem;
+            background: linear-gradient(135deg, var(--text-main), var(--text-sec));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .upload-area p {
             margin: 0;
             color: var(--text-sec);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
         }
 
         .upload-hint {
-            margin-top: 1rem;
-            padding: 8px 16px;
-            background: rgba(99, 102, 241, 0.1);
+            margin-top: 1.25rem;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, rgba(129, 140, 248, 0.15), rgba(34, 211, 238, 0.1));
             border-radius: 99px;
-            font-size: 0.8rem;
-            color: var(--primary);
+            font-size: 0.85rem;
+            color: var(--cyan);
+            border: 1px solid rgba(34, 211, 238, 0.2);
         }
 
         .stats-panel {
-            background: var(--bg-card);
+            background: linear-gradient(145deg, rgba(15, 22, 41, 0.8), rgba(15, 22, 41, 0.95));
             border-radius: var(--radius);
-            padding: 1.5rem;
-            border: 1px solid var(--border);
+            padding: 1.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stats-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), var(--accent), transparent);
+            opacity: 0.5;
         }
 
         .stats-header {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             margin-bottom: 1.5rem;
             padding-bottom: 1rem;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
         }
 
         .stats-header i {
-            color: var(--primary);
+            color: var(--cyan);
+            font-size: 1.1rem;
         }
 
         .stats-header h3 {
             margin: 0;
-            font-size: 1rem;
+            font-size: 1.05rem;
             font-weight: 600;
         }
 
@@ -684,7 +775,13 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
             justify-content: space-between;
             align-items: center;
             padding: 14px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            transition: all 0.3s ease;
+        }
+
+        .stat-row:hover {
+            padding-left: 8px;
+            background: linear-gradient(90deg, rgba(129, 140, 248, 0.05), transparent);
         }
 
         .stat-row:last-child {
@@ -695,33 +792,39 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
         .stat-label {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             color: var(--text-sec);
             font-size: 0.9rem;
         }
 
         .stat-label i {
-            width: 18px;
+            width: 20px;
             text-align: center;
             color: var(--text-muted);
+            transition: color 0.3s ease;
+        }
+
+        .stat-row:hover .stat-label i {
+            color: var(--primary);
         }
 
         .stat-val {
             color: white;
             font-weight: 600;
             font-size: 0.95rem;
+            font-variant-numeric: tabular-nums;
         }
 
         .storage-bar {
             margin-top: 1.5rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--border);
+            padding-top: 1.25rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
         }
 
         .storage-info {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             font-size: 0.85rem;
         }
 
@@ -731,59 +834,81 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
 
         .storage-info span:last-child {
             color: var(--text-main);
-            font-weight: 500;
+            font-weight: 600;
         }
 
         .storage-track {
-            height: 8px;
-            background: var(--border);
+            height: 10px;
+            background: rgba(255, 255, 255, 0.06);
             border-radius: 99px;
             overflow: hidden;
+            position: relative;
         }
 
         .storage-fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
+            background: linear-gradient(90deg, var(--primary), var(--cyan), var(--accent));
             border-radius: 99px;
-            transition: width 0.5s ease;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            box-shadow: 0 0 20px var(--primary-glow);
+        }
+
+        .storage-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: storageShine 2s ease-in-out infinite;
+        }
+
+        @keyframes storageShine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
 
         .storage-fill.warning {
             background: linear-gradient(90deg, var(--warning), var(--danger));
+            box-shadow: 0 0 20px var(--danger-glow);
         }
 
         .section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin: 2.5rem 0 1.5rem;
+            margin: 3rem 0 1.75rem;
         }
 
         .section-title {
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-size: 1.25rem;
-            font-weight: 600;
+            gap: 14px;
+            font-size: 1.35rem;
+            font-weight: 700;
         }
 
         .section-title i {
-            color: var(--primary);
+            color: var(--cyan);
+            font-size: 1.2rem;
         }
 
         .photo-count {
-            background: var(--bg-card);
-            padding: 6px 14px;
+            background: linear-gradient(135deg, rgba(129, 140, 248, 0.1), rgba(34, 211, 238, 0.1));
+            padding: 8px 18px;
             border-radius: 99px;
             font-size: 0.85rem;
             color: var(--text-sec);
-            border: 1px solid var(--border);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            font-weight: 500;
         }
 
         .gallery-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1.75rem;
         }
 
         .card {
@@ -793,38 +918,60 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
             position: relative;
             aspect-ratio: 1;
             box-shadow: var(--shadow);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid var(--border);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: var(--radius);
+            padding: 1px;
+            background: linear-gradient(135deg, var(--primary), var(--cyan), var(--accent));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 1;
+            pointer-events: none;
         }
 
         .card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: var(--shadow-lg), 0 0 30px var(--primary-glow);
-            border-color: var(--primary);
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: var(--shadow-lg), 0 0 50px rgba(129, 140, 248, 0.2);
+        }
+
+        .card:hover::before {
+            opacity: 1;
         }
 
         .card img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), filter 0.4s ease;
         }
 
         .card:hover img {
-            transform: scale(1.1);
+            transform: scale(1.12);
+            filter: brightness(0.85);
         }
 
         .card-overlay {
             position: absolute;
             inset: 0;
-            background: linear-gradient(to top, rgba(10, 14, 23, 0.95) 0%, rgba(10, 14, 23, 0.5) 40%, transparent 100%);
+            background: linear-gradient(to top, rgba(3, 7, 18, 0.98) 0%, rgba(3, 7, 18, 0.6) 35%, transparent 100%);
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.4s ease;
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
-            padding: 1.25rem;
+            padding: 1.5rem;
             cursor: pointer;
+            z-index: 2;
         }
 
         .card:hover .card-overlay {
@@ -833,11 +980,11 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
 
         .card-actions {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             justify-content: center;
-            margin-bottom: 12px;
-            transform: translateY(20px);
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-bottom: 14px;
+            transform: translateY(25px);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .card:hover .card-actions {
@@ -846,32 +993,31 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
 
         .action-btn {
             background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             color: white;
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             text-decoration: none;
         }
 
         .action-btn:hover {
-            background: var(--primary);
-            border-color: var(--primary);
-            transform: scale(1.15);
-            box-shadow: 0 5px 15px var(--primary-glow);
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-color: transparent;
+            transform: scale(1.2) translateY(-3px);
+            box-shadow: 0 8px 25px var(--primary-glow);
         }
 
         .action-btn.del:hover {
-            background: var(--danger);
-            border-color: var(--danger);
-            box-shadow: 0 5px 15px var(--danger-glow);
+            background: linear-gradient(135deg, var(--danger), #dc2626);
+            box-shadow: 0 8px 25px var(--danger-glow);
         }
 
         .file-meta {
@@ -879,8 +1025,9 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
             color: var(--text-sec);
             text-align: center;
             opacity: 0;
-            transform: translateY(10px);
-            transition: all 0.3s ease;
+            transform: translateY(15px);
+            transition: all 0.4s ease;
+            font-weight: 500;
         }
 
         .card:hover .file-meta {
@@ -891,87 +1038,103 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
         .empty-state {
             grid-column: 1 / -1;
             text-align: center;
-            padding: 5rem 2rem;
-            background: var(--bg-card);
-            border: 2px dashed var(--border);
+            padding: 6rem 2rem;
+            background: linear-gradient(145deg, rgba(15, 22, 41, 0.6), rgba(15, 22, 41, 0.9));
+            border: 2px dashed rgba(129, 140, 248, 0.2);
             border-radius: var(--radius);
+            backdrop-filter: blur(10px);
         }
 
         .empty-icon {
-            width: 100px;
-            height: 100px;
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.1));
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, rgba(129, 140, 248, 0.15), rgba(34, 211, 238, 0.1), rgba(192, 132, 252, 0.15));
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 1.5rem;
+            margin: 0 auto 2rem;
+            animation: emptyPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes emptyPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
         }
 
         .empty-icon i {
-            font-size: 2.5rem;
-            color: var(--text-muted);
+            font-size: 3rem;
+            background: linear-gradient(135deg, var(--primary), var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .empty-state h3 {
-            margin: 0 0 0.5rem;
+            margin: 0 0 0.75rem;
             color: var(--text-main);
+            font-size: 1.5rem;
+            font-weight: 600;
         }
 
         .empty-state p {
             color: var(--text-sec);
             margin: 0;
+            font-size: 1rem;
         }
 
         .pagination {
             display: flex;
             justify-content: center;
-            gap: 8px;
-            margin-top: 3rem;
+            gap: 10px;
+            margin-top: 3.5rem;
             flex-wrap: wrap;
         }
 
         .page-link {
-            min-width: 42px;
-            height: 42px;
+            min-width: 46px;
+            height: 46px;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 0 12px;
+            padding: 0 14px;
             border-radius: var(--radius-sm);
-            background: var(--bg-card);
+            background: rgba(15, 22, 41, 0.8);
             color: var(--text-sec);
             text-decoration: none;
-            border: 1px solid var(--border);
-            font-weight: 500;
-            transition: all 0.2s ease;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
         }
 
         .page-link:hover {
-            background: var(--bg-card-hover);
+            background: rgba(129, 140, 248, 0.15);
             color: white;
             border-color: var(--primary);
+            transform: translateY(-2px);
         }
 
         .page-link.active {
             background: linear-gradient(135deg, var(--primary), var(--accent));
             color: white;
             border-color: transparent;
-            box-shadow: 0 4px 15px var(--primary-glow);
+            box-shadow: 0 6px 20px var(--primary-glow);
+            transform: translateY(-2px);
         }
 
         #lightbox {
             position: fixed;
             inset: 0;
-            background: rgba(5, 7, 12, 0.98);
+            background: rgba(3, 7, 18, 0.97);
             z-index: 1000;
             display: none;
             justify-content: center;
             align-items: center;
             opacity: 0;
-            transition: opacity 0.3s ease;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            transition: opacity 0.4s ease;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
 
         #lightbox.visible {
@@ -981,23 +1144,44 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
         #lightbox img {
             max-width: 92vw;
             max-height: 88vh;
-            border-radius: var(--radius-sm);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8);
+            border-radius: var(--radius);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7), 0 0 100px rgba(129, 140, 248, 0.1);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        #lightbox.visible img {
+            animation: lbZoomIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes lbZoomIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
 
         .lb-controls {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 24px;
+            right: 24px;
             display: flex;
-            gap: 10px;
+            gap: 12px;
+            z-index: 10;
         }
 
+        .lb-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+        }
+
+        .lb-nav.prev { left: 24px; }
+        .lb-nav.next { right: 24px; }
+
         .lb-btn {
-            width: 48px;
-            height: 48px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            width: 52px;
+            height: 52px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -1005,26 +1189,43 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
             color: white;
             font-size: 1.25rem;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
         }
 
         .lb-btn:hover {
-            background: var(--primary);
-            border-color: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-color: transparent;
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px var(--primary-glow);
+        }
+
+        .lb-counter {
+            position: absolute;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            padding: 10px 20px;
+            border-radius: 99px;
+            font-size: 0.9rem;
+            color: var(--text-sec);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(10, 14, 23, 0.9);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            background: rgba(3, 7, 18, 0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             z-index: 2000;
             display: none;
             justify-content: center;
             align-items: center;
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.4s ease;
         }
 
         .modal-overlay.active {
@@ -1033,16 +1234,27 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
         }
 
         .share-modal {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
+            background: linear-gradient(145deg, rgba(15, 22, 41, 0.95), rgba(15, 22, 41, 0.98));
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: var(--radius);
             width: 90%;
-            max-width: 520px;
+            max-width: 540px;
             padding: 0;
-            box-shadow: var(--shadow-lg);
-            transform: scale(0.95) translateY(20px);
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-lg), 0 0 80px rgba(129, 140, 248, 0.1);
+            transform: scale(0.92) translateY(30px);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             overflow: hidden;
+            position: relative;
+        }
+
+        .share-modal::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), var(--cyan), var(--accent), transparent);
         }
 
         .modal-overlay.active .share-modal {
@@ -1053,44 +1265,53 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1.25rem 1.5rem;
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.1));
-            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 1.75rem;
+            background: linear-gradient(135deg, rgba(129, 140, 248, 0.1), rgba(34, 211, 238, 0.05), rgba(192, 132, 252, 0.1));
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
         }
 
         .modal-header h3 {
             margin: 0;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            font-weight: 600;
         }
 
         .modal-header h3 i {
-            color: var(--primary);
+            color: var(--cyan);
         }
 
         .close-modal-btn {
-            background: none;
-            border: none;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             color: var(--text-sec);
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             cursor: pointer;
-            padding: 0;
+            padding: 8px;
             line-height: 1;
-            transition: color 0.2s ease;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
         }
 
         .close-modal-btn:hover {
             color: white;
+            background: rgba(248, 113, 113, 0.2);
+            border-color: var(--danger);
         }
 
         .modal-body {
-            padding: 1.5rem;
+            padding: 1.75rem;
         }
 
         .share-group {
-            margin-bottom: 1.25rem;
+            margin-bottom: 1.5rem;
         }
 
         .share-group:last-child {
@@ -1101,63 +1322,66 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
             display: block;
             color: var(--text-sec);
             font-size: 0.85rem;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             font-weight: 500;
         }
 
         .input-with-btn {
             display: flex;
-            gap: 8px;
+            gap: 10px;
         }
 
         .input-with-btn input {
             flex: 1;
-            background: var(--bg-body);
-            border: 1px solid var(--border);
+            background: rgba(3, 7, 18, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: var(--radius-sm);
-            padding: 12px 14px;
+            padding: 14px 16px;
             color: var(--text-main);
-            font-family: 'Courier New', monospace;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
             font-size: 0.85rem;
+            transition: all 0.3s ease;
         }
 
         .input-with-btn input:focus {
             border-color: var(--primary);
             outline: none;
-            box-shadow: 0 0 0 3px var(--primary-glow);
+            box-shadow: 0 0 0 4px var(--primary-glow);
+            background: rgba(3, 7, 18, 0.8);
         }
 
         .input-with-btn .copy-btn {
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--accent));
             border: none;
             color: white;
             border-radius: var(--radius-sm);
-            width: 48px;
+            width: 52px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .input-with-btn .copy-btn:hover {
-            background: var(--primary-hover);
-            transform: scale(1.05);
+            transform: scale(1.08);
+            box-shadow: 0 6px 20px var(--primary-glow);
         }
 
         .input-with-btn .copy-btn.copied {
-            background: var(--success);
+            background: linear-gradient(135deg, var(--success), #059669);
         }
 
         .loader-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(10, 14, 23, 0.98);
+            background: rgba(3, 7, 18, 0.97);
             z-index: 3000;
             display: none;
             justify-content: center;
             align-items: center;
             flex-direction: column;
+            backdrop-filter: blur(10px);
         }
 
         .loader-content {
@@ -1165,13 +1389,15 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
         }
 
         .loader-spinner {
-            width: 60px;
-            height: 60px;
-            border: 3px solid var(--border);
+            width: 70px;
+            height: 70px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
             border-top-color: var(--primary);
+            border-right-color: var(--cyan);
             border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 1.5rem;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 2rem;
+            box-shadow: 0 0 30px var(--primary-glow);
         }
 
         @keyframes spin {
@@ -1179,55 +1405,81 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
         }
 
         .loader-content h3 {
-            margin: 0 0 0.5rem;
-            font-size: 1.25rem;
+            margin: 0 0 0.75rem;
+            font-size: 1.35rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--text-main), var(--text-sec));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .loader-content p {
             color: var(--text-sec);
-            margin: 0 0 1.5rem;
-            font-size: 0.9rem;
+            margin: 0 0 2rem;
+            font-size: 0.95rem;
         }
 
         .progress-container {
-            width: 320px;
-            height: 8px;
-            background: var(--border);
+            width: 360px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.06);
             border-radius: 99px;
             overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         .progress-bar {
             height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
+            background: linear-gradient(90deg, var(--primary), var(--cyan), var(--accent));
             width: 0%;
-            transition: width 0.2s ease;
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             border-radius: 99px;
+            position: relative;
+            box-shadow: 0 0 20px var(--primary-glow);
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: progressShine 1.5s ease-in-out infinite;
+        }
+
+        @keyframes progressShine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
 
         .progress-text {
-            margin-top: 10px;
-            font-size: 0.85rem;
-            color: var(--text-sec);
+            margin-top: 14px;
+            font-size: 0.9rem;
+            color: var(--cyan);
+            font-weight: 600;
         }
 
         #toast {
             position: fixed;
-            bottom: 30px;
+            bottom: 32px;
             left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: var(--bg-card);
+            transform: translateX(-50%) translateY(120px);
+            background: linear-gradient(145deg, rgba(15, 22, 41, 0.95), rgba(15, 22, 41, 0.98));
             color: white;
-            padding: 14px 24px;
+            padding: 16px 28px;
             border-radius: var(--radius-sm);
-            border: 1px solid var(--border);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             box-shadow: var(--shadow-lg);
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
             z-index: 4000;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             font-weight: 500;
+            backdrop-filter: blur(20px);
         }
 
         #toast.show {
@@ -1236,25 +1488,50 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
 
         #toast.success {
             border-color: var(--success);
-            box-shadow: var(--shadow-lg), 0 0 20px var(--success-glow);
+            box-shadow: var(--shadow-lg), 0 0 30px var(--success-glow);
         }
 
         #toast.success i {
             color: var(--success);
+            font-size: 1.1rem;
         }
 
         #toast.error {
             border-color: var(--danger);
-            box-shadow: var(--shadow-lg), 0 0 20px var(--danger-glow);
+            box-shadow: var(--shadow-lg), 0 0 30px var(--danger-glow);
         }
 
         #toast.error i {
             color: var(--danger);
+            font-size: 1.1rem;
         }
 
-        @media (max-width: 900px) {
+        @media (max-width: 1024px) {
             .dashboard-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .stats-panel {
+                order: 2;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+                gap: 1.25rem;
+            }
+
+            .section-title {
+                font-size: 1.15rem;
+            }
+
+            .lb-nav {
+                display: none;
             }
         }
 
@@ -1262,42 +1539,78 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
             .header-inner {
                 gap: 10px;
             }
-            
+
             .user-pill {
                 display: none;
             }
-            
+
             .btn-primary span {
                 display: none;
             }
-            
+
             .btn-primary {
-                padding: 10px 14px;
+                padding: 11px 16px;
             }
 
             .gallery-grid {
-                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-                gap: 1rem;
+                grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+                gap: 0.875rem;
+            }
+
+            .card {
+                border-radius: var(--radius-sm);
             }
 
             .upload-area {
-                padding: 2rem 1.5rem;
+                padding: 2.5rem 1.5rem;
             }
 
             .upload-icon {
-                width: 60px;
-                height: 60px;
+                width: 70px;
+                height: 70px;
             }
 
             .upload-icon i {
-                font-size: 1.5rem;
+                font-size: 1.75rem;
+            }
+
+            .upload-area h3 {
+                font-size: 1.1rem;
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .progress-container {
+                width: 280px;
+            }
+
+            #toast {
+                left: 16px;
+                right: 16px;
+                transform: translateX(0) translateY(120px);
+                width: auto;
+            }
+
+            #toast.show {
+                transform: translateX(0) translateY(0);
+            }
+        }
+
+        @media (max-width: 400px) {
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
             }
         }
 
         @media (hover: none) {
             .card-overlay {
                 opacity: 1;
-                background: linear-gradient(to top, rgba(10, 14, 23, 0.9) 0%, transparent 60%);
+                background: linear-gradient(to top, rgba(3, 7, 18, 0.95) 0%, transparent 50%);
             }
 
             .card-actions {
@@ -1308,6 +1621,44 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
                 opacity: 1;
                 transform: translateY(0);
             }
+
+            .card:hover {
+                transform: none;
+            }
+
+            .card:hover img {
+                transform: none;
+                filter: none;
+            }
+        }
+
+        /* Улучшенный скроллбар */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-body);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--primary), var(--accent));
+            border-radius: 99px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, var(--primary-hover), var(--primary));
+        }
+
+        /* Плавная прокрутка */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Выделение текста */
+        ::selection {
+            background: var(--primary);
+            color: white;
         }
     </style>
 </head>
@@ -1468,11 +1819,21 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
 
     <div id="lightbox" onclick="closeLightbox()">
         <div class="lb-controls" onclick="event.stopPropagation()">
-            <button class="lb-btn" onclick="closeLightbox()" title="Закрыть">
+            <a id="lb-download" href="#" download class="lb-btn" title="Скачать">
+                <i class="fas fa-download"></i>
+            </a>
+            <button class="lb-btn" onclick="closeLightbox()" title="Закрыть (Esc)">
                 <i class="fas fa-times"></i>
             </button>
         </div>
+        <button class="lb-btn lb-nav prev" onclick="event.stopPropagation(); navigateLightbox(-1)" title="Предыдущее (←)">
+            <i class="fas fa-chevron-left"></i>
+        </button>
         <img id="lb-img" src="" onclick="event.stopPropagation()" alt="Просмотр изображения">
+        <button class="lb-btn lb-nav next" onclick="event.stopPropagation(); navigateLightbox(1)" title="Следующее (→)">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+        <div class="lb-counter" id="lb-counter" onclick="event.stopPropagation()"></div>
     </div>
 
     <div id="shareModalOverlay" class="modal-overlay" onclick="closeShareModal(event)">
@@ -1541,12 +1902,40 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
 
     <script>
         'use strict';
-        
+
         const dropZone = document.getElementById('dropZone');
         const fileInput = document.getElementById('fileInput');
         const loader = document.getElementById('loader');
         const progressFill = document.getElementById('progressFill');
         const progressText = document.getElementById('progressText');
+
+        // Массив изображений для навигации
+        let galleryImages = [];
+        let currentImageIndex = 0;
+
+        // Инициализация галереи
+        document.querySelectorAll('.card').forEach((card, index) => {
+            const overlay = card.querySelector('.card-overlay');
+            if (overlay) {
+                const imgSrc = overlay.getAttribute('onclick')?.match(/'([^']+)'/)?.[1];
+                if (imgSrc) {
+                    galleryImages.push(imgSrc);
+                }
+            }
+        });
+
+        // Эффект скролла для хедера
+        const header = document.querySelector('header');
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            if (currentScroll > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+            lastScroll = currentScroll;
+        }, { passive: true });
 
         dropZone.onclick = () => fileInput.click();
 
@@ -1622,7 +2011,24 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
         function openLightbox(src) {
             const lb = document.getElementById('lightbox');
             const img = document.getElementById('lb-img');
+            const download = document.getElementById('lb-download');
+            const counter = document.getElementById('lb-counter');
+
+            // Найти индекс изображения
+            currentImageIndex = galleryImages.indexOf(src);
+            if (currentImageIndex === -1) currentImageIndex = 0;
+
             img.src = src;
+            download.href = src;
+
+            // Обновить счётчик
+            if (galleryImages.length > 0) {
+                counter.textContent = `${currentImageIndex + 1} / ${galleryImages.length}`;
+                counter.style.display = 'block';
+            } else {
+                counter.style.display = 'none';
+            }
+
             lb.style.display = 'flex';
             requestAnimationFrame(() => lb.classList.add('visible'));
             document.body.style.overflow = 'hidden';
@@ -1635,7 +2041,40 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
                 lb.style.display = 'none';
                 document.getElementById('lb-img').src = '';
                 document.body.style.overflow = '';
-            }, 300);
+            }, 400);
+        }
+
+        function navigateLightbox(direction) {
+            if (galleryImages.length === 0) return;
+
+            currentImageIndex += direction;
+            if (currentImageIndex < 0) currentImageIndex = galleryImages.length - 1;
+            if (currentImageIndex >= galleryImages.length) currentImageIndex = 0;
+
+            const img = document.getElementById('lb-img');
+            const download = document.getElementById('lb-download');
+            const counter = document.getElementById('lb-counter');
+
+            // Анимация смены изображения
+            img.style.opacity = '0';
+            img.style.transform = direction > 0 ? 'translateX(30px)' : 'translateX(-30px)';
+
+            setTimeout(() => {
+                img.src = galleryImages[currentImageIndex];
+                download.href = galleryImages[currentImageIndex];
+                counter.textContent = `${currentImageIndex + 1} / ${galleryImages.length}`;
+
+                img.style.transform = direction > 0 ? 'translateX(-30px)' : 'translateX(30px)';
+                requestAnimationFrame(() => {
+                    img.style.transition = 'all 0.3s ease';
+                    img.style.opacity = '1';
+                    img.style.transform = 'translateX(0)';
+                });
+            }, 200);
+
+            setTimeout(() => {
+                img.style.transition = '';
+            }, 500);
         }
 
         function openShareModal(url, name) {
@@ -1708,13 +2147,68 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
             window.toastTimeout = setTimeout(() => t.classList.remove('show'), 3500);
         }
 
+        // Улучшенная обработка клавиш
         document.onkeydown = (e) => {
+            const lb = document.getElementById('lightbox');
+            const isLightboxOpen = lb.style.display === 'flex';
+
             if (e.key === 'Escape') {
                 closeLightbox();
                 closeShareModal();
             }
+
+            if (isLightboxOpen) {
+                if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    navigateLightbox(-1);
+                } else if (e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    navigateLightbox(1);
+                } else if (e.key === ' ') {
+                    e.preventDefault();
+                    navigateLightbox(1);
+                }
+            }
         };
 
+        // Поддержка свайпов для lightbox
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchEndX = 0;
+        let touchEndY = 0;
+
+        const lightbox = document.getElementById('lightbox');
+
+        lightbox.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+        }, { passive: true });
+
+        lightbox.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            touchEndY = e.changedTouches[0].screenY;
+            handleSwipe();
+        }, { passive: true });
+
+        function handleSwipe() {
+            const diffX = touchEndX - touchStartX;
+            const diffY = touchEndY - touchStartY;
+            const minSwipeDistance = 50;
+
+            // Проверяем что это горизонтальный свайп
+            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > minSwipeDistance) {
+                if (diffX > 0) {
+                    navigateLightbox(-1); // Свайп вправо - предыдущее
+                } else {
+                    navigateLightbox(1); // Свайп влево - следующее
+                }
+            } else if (Math.abs(diffY) > minSwipeDistance && diffY > 0) {
+                // Свайп вниз - закрыть
+                closeLightbox();
+            }
+        }
+
+        // Вставка из буфера обмена
         document.addEventListener('paste', (e) => {
             const items = e.clipboardData.items;
             const files = [];
@@ -1727,6 +2221,65 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
                 handleUpload(files);
             }
         });
+
+        // Ленивая загрузка изображений с Intersection Observer
+        if ('IntersectionObserver' in window) {
+            const imageObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        if (img.dataset.src) {
+                            img.src = img.dataset.src;
+                            img.removeAttribute('data-src');
+                        }
+                        imageObserver.unobserve(img);
+                    }
+                });
+            }, { rootMargin: '50px' });
+
+            document.querySelectorAll('.card img[loading="lazy"]').forEach(img => {
+                imageObserver.observe(img);
+            });
+        }
+
+        // Добавляем эффект ripple для кнопок
+        document.querySelectorAll('.btn, .action-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+
+                ripple.style.cssText = `
+                    position: absolute;
+                    width: ${size}px;
+                    height: ${size}px;
+                    left: ${x}px;
+                    top: ${y}px;
+                    background: rgba(255, 255, 255, 0.3);
+                    border-radius: 50%;
+                    transform: scale(0);
+                    animation: rippleEffect 0.6s ease-out;
+                    pointer-events: none;
+                `;
+
+                this.style.position = 'relative';
+                this.style.overflow = 'hidden';
+                this.appendChild(ripple);
+
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+
+        // Добавляем CSS для ripple эффекта
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes rippleEffect {
+                to { transform: scale(4); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>
