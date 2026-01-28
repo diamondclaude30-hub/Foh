@@ -1660,6 +1660,390 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
             background: var(--primary);
             color: white;
         }
+
+        /* Skeleton загрузка */
+        .skeleton {
+            background: linear-gradient(90deg,
+                var(--bg-card) 0%,
+                rgba(129, 140, 248, 0.1) 50%,
+                var(--bg-card) 100%);
+            background-size: 200% 100%;
+            animation: skeletonShimmer 1.5s ease-in-out infinite;
+        }
+
+        @keyframes skeletonShimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .card img {
+            opacity: 0;
+            transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), filter 0.4s ease;
+        }
+
+        .card img.loaded {
+            opacity: 1;
+        }
+
+        .card.loading::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg,
+                var(--bg-card) 0%,
+                rgba(129, 140, 248, 0.15) 50%,
+                var(--bg-card) 100%);
+            background-size: 200% 100%;
+            animation: skeletonShimmer 1.5s ease-in-out infinite;
+            z-index: 1;
+        }
+
+        /* Анимация появления карточек */
+        .card {
+            opacity: 0;
+            transform: translateY(30px) scale(0.95);
+            animation: cardAppear 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes cardAppear {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .gallery-grid .card:nth-child(1) { animation-delay: 0.05s; }
+        .gallery-grid .card:nth-child(2) { animation-delay: 0.1s; }
+        .gallery-grid .card:nth-child(3) { animation-delay: 0.15s; }
+        .gallery-grid .card:nth-child(4) { animation-delay: 0.2s; }
+        .gallery-grid .card:nth-child(5) { animation-delay: 0.25s; }
+        .gallery-grid .card:nth-child(6) { animation-delay: 0.3s; }
+        .gallery-grid .card:nth-child(7) { animation-delay: 0.35s; }
+        .gallery-grid .card:nth-child(8) { animation-delay: 0.4s; }
+        .gallery-grid .card:nth-child(9) { animation-delay: 0.45s; }
+        .gallery-grid .card:nth-child(10) { animation-delay: 0.5s; }
+        .gallery-grid .card:nth-child(n+11) { animation-delay: 0.55s; }
+
+        /* Мультивыбор */
+        .select-mode .card {
+            cursor: pointer;
+        }
+
+        .select-mode .card::after {
+            content: '';
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            width: 28px;
+            height: 28px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-radius: 8px;
+            z-index: 5;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(8px);
+        }
+
+        .select-mode .card.selected::after {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-color: transparent;
+            box-shadow: 0 4px 15px var(--primary-glow);
+        }
+
+        .select-mode .card.selected::before {
+            opacity: 1 !important;
+        }
+
+        .card .check-icon {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            width: 20px;
+            height: 20px;
+            z-index: 6;
+            opacity: 0;
+            color: white;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .select-mode .card.selected .check-icon {
+            opacity: 1;
+        }
+
+        /* Панель массовых действий */
+        .bulk-actions {
+            position: fixed;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: linear-gradient(145deg, rgba(15, 22, 41, 0.98), rgba(15, 22, 41, 0.95));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius);
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            z-index: 500;
+            backdrop-filter: blur(20px);
+            box-shadow: var(--shadow-lg), 0 0 60px rgba(129, 140, 248, 0.15);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .bulk-actions.visible {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .bulk-actions .selected-count {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-sec);
+            font-size: 0.95rem;
+        }
+
+        .bulk-actions .selected-count strong {
+            color: var(--cyan);
+            font-size: 1.1rem;
+        }
+
+        .bulk-actions .bulk-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            background: transparent;
+            color: var(--text-sec);
+        }
+
+        .bulk-actions .bulk-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .bulk-actions .bulk-btn.delete {
+            background: linear-gradient(135deg, var(--danger), #dc2626);
+            border-color: transparent;
+            color: white;
+        }
+
+        .bulk-actions .bulk-btn.delete:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px var(--danger-glow);
+        }
+
+        /* Кнопка выбора в хедере */
+        .btn-select {
+            background: rgba(15, 22, 41, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--text-sec);
+            padding: 11px 18px;
+        }
+
+        .btn-select:hover {
+            background: rgba(129, 140, 248, 0.15);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .btn-select.active {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            border-color: transparent;
+        }
+
+        /* Улучшенный lightbox с зумом */
+        #lightbox img {
+            cursor: zoom-in;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+
+        #lightbox img.zoomed {
+            cursor: grab;
+            max-width: none;
+            max-height: none;
+        }
+
+        #lightbox img.zoomed:active {
+            cursor: grabbing;
+        }
+
+        .lb-info {
+            position: absolute;
+            bottom: 24px;
+            left: 24px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            padding: 12px 20px;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            color: var(--text-sec);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+
+        #lightbox.visible .lb-info {
+            opacity: 1;
+            transform: translateY(0);
+            transition-delay: 0.3s;
+        }
+
+        .lb-info span {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .lb-info i {
+            color: var(--cyan);
+            font-size: 0.9rem;
+        }
+
+        .lb-zoom-hint {
+            position: absolute;
+            top: 24px;
+            left: 24px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            padding: 8px 14px;
+            border-radius: 99px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #lightbox.visible .lb-zoom-hint {
+            opacity: 1;
+            transition-delay: 0.5s;
+        }
+
+        #lightbox.zoomed .lb-zoom-hint {
+            opacity: 0;
+        }
+
+        /* Preloader для lightbox */
+        .lb-preloader {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            z-index: 5;
+            display: none;
+        }
+
+        #lightbox.loading .lb-preloader {
+            display: block;
+        }
+
+        /* Подтверждение удаления */
+        .confirm-modal {
+            background: linear-gradient(145deg, rgba(15, 22, 41, 0.98), rgba(15, 22, 41, 0.95));
+            border: 1px solid rgba(248, 113, 113, 0.3);
+            border-radius: var(--radius);
+            padding: 2rem;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: var(--shadow-lg), 0 0 60px var(--danger-glow);
+        }
+
+        .confirm-modal h3 {
+            margin: 0 0 1rem;
+            color: var(--danger);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .confirm-modal p {
+            color: var(--text-sec);
+            margin: 0 0 1.5rem;
+        }
+
+        .confirm-modal .confirm-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        /* Анимация удаления карточки */
+        .card.deleting {
+            animation: cardDelete 0.5s ease forwards;
+        }
+
+        @keyframes cardDelete {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(0.9); opacity: 0.5; }
+            100% { transform: scale(0.8); opacity: 0; height: 0; padding: 0; margin: 0; }
+        }
+
+        /* Улучшенный футер статистики */
+        .stats-footer {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            text-align: center;
+        }
+
+        .stats-footer p {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            margin: 0;
+        }
+
+        /* Tooltip */
+        [data-tooltip] {
+            position: relative;
+        }
+
+        [data-tooltip]::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%) scale(0.9);
+            background: rgba(15, 22, 41, 0.95);
+            color: var(--text-main);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+        }
+
+        [data-tooltip]:hover::after {
+            opacity: 1;
+            transform: translateX(-50%) scale(1);
+        }
     </style>
 </head>
 <body>
@@ -1675,6 +2059,12 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
                     <i class="fas fa-user-astronaut"></i>
                     <?= htmlspecialchars($_SESSION['username'] ?? 'User') ?>
                 </div>
+                <?php if ($totalPhotos > 0): ?>
+                <button class="btn btn-select" id="selectModeBtn" onclick="toggleSelectMode()" data-tooltip="Выбрать несколько">
+                    <i class="fas fa-check-double"></i>
+                    <span>Выбрать</span>
+                </button>
+                <?php endif; ?>
                 <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">
                     <i class="fas fa-cloud-upload-alt"></i>
                     <span>Загрузить</span>
@@ -1761,9 +2151,10 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
                     $protocol = $isSecure ? "https" : "http";
                     $fullUrl = $protocol . "://" . $_SERVER['HTTP_HOST'] . rtrim(dirname($_SERVER['PHP_SELF']), '/') . '/' . $webFull;
                 ?>
-                    <div class="card">
-                        <img src="<?= $webThumb ?>" loading="lazy" alt="<?= htmlspecialchars($photo['original_name'], ENT_QUOTES, 'UTF-8') ?>">
-                        <div class="card-overlay" onclick="openLightbox('<?= addslashes($webFull) ?>')">
+                    <div class="card loading" data-id="<?= $photo['id'] ?>">
+                        <i class="fas fa-check check-icon"></i>
+                        <img src="<?= $webThumb ?>" loading="lazy" alt="<?= htmlspecialchars($photo['original_name'], ENT_QUOTES, 'UTF-8') ?>" onload="this.classList.add('loaded'); this.parentElement.classList.remove('loading');">
+                        <div class="card-overlay" onclick="handleCardClick(event, '<?= addslashes($webFull) ?>', <?= $photo['id'] ?>)">
                             <div class="card-actions" onclick="event.stopPropagation()">
                                 <button class="action-btn" onclick="openShareModal('<?= addslashes($fullUrl) ?>', '<?= htmlspecialchars($photo['original_name'], ENT_QUOTES, 'UTF-8') ?>')" title="Поделиться">
                                     <i class="fas fa-link"></i>
@@ -1817,9 +2208,14 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
         <?php endif; ?>
     </main>
 
-    <div id="lightbox" onclick="closeLightbox()">
+    <div id="lightbox" onclick="handleLightboxClick(event)">
+        <div class="lb-preloader"></div>
+        <div class="lb-zoom-hint"><i class="fas fa-search-plus"></i> Двойной клик для увеличения</div>
         <div class="lb-controls" onclick="event.stopPropagation()">
-            <a id="lb-download" href="#" download class="lb-btn" title="Скачать">
+            <button class="lb-btn" onclick="toggleZoom()" title="Увеличить (Z)">
+                <i class="fas fa-search-plus" id="zoom-icon"></i>
+            </button>
+            <a id="lb-download" href="#" download class="lb-btn" title="Скачать (D)">
                 <i class="fas fa-download"></i>
             </a>
             <button class="lb-btn" onclick="closeLightbox()" title="Закрыть (Esc)">
@@ -1829,11 +2225,32 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
         <button class="lb-btn lb-nav prev" onclick="event.stopPropagation(); navigateLightbox(-1)" title="Предыдущее (←)">
             <i class="fas fa-chevron-left"></i>
         </button>
-        <img id="lb-img" src="" onclick="event.stopPropagation()" alt="Просмотр изображения">
+        <img id="lb-img" src="" onclick="event.stopPropagation()" ondblclick="toggleZoom()" alt="Просмотр изображения">
         <button class="lb-btn lb-nav next" onclick="event.stopPropagation(); navigateLightbox(1)" title="Следующее (→)">
             <i class="fas fa-chevron-right"></i>
         </button>
+        <div class="lb-info" id="lb-info" onclick="event.stopPropagation()">
+            <span><i class="fas fa-image"></i> <span id="lb-filename"></span></span>
+            <span><i class="fas fa-expand"></i> <span id="lb-dimensions"></span></span>
+        </div>
         <div class="lb-counter" id="lb-counter" onclick="event.stopPropagation()"></div>
+    </div>
+
+    <!-- Панель массовых действий -->
+    <div class="bulk-actions" id="bulkActions">
+        <div class="selected-count">
+            <i class="fas fa-check-circle"></i>
+            Выбрано: <strong id="selectedCount">0</strong>
+        </div>
+        <button class="bulk-btn" onclick="selectAllPhotos()">
+            <i class="fas fa-check-double"></i> Выбрать все
+        </button>
+        <button class="bulk-btn" onclick="deselectAllPhotos()">
+            <i class="fas fa-times"></i> Сбросить
+        </button>
+        <button class="bulk-btn delete" onclick="deleteSelectedPhotos()">
+            <i class="fas fa-trash-alt"></i> Удалить
+        </button>
     </div>
 
     <div id="shareModalOverlay" class="modal-overlay" onclick="closeShareModal(event)">
@@ -1911,18 +2328,46 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
 
         // Массив изображений для навигации
         let galleryImages = [];
+        let galleryData = [];
         let currentImageIndex = 0;
+        let isSelectMode = false;
+        let selectedPhotos = new Set();
+        let isZoomed = false;
+        let zoomLevel = 1;
+        let panX = 0, panY = 0;
+        let isDragging = false;
+        let dragStartX, dragStartY;
 
         // Инициализация галереи
         document.querySelectorAll('.card').forEach((card, index) => {
             const overlay = card.querySelector('.card-overlay');
+            const img = card.querySelector('img');
             if (overlay) {
-                const imgSrc = overlay.getAttribute('onclick')?.match(/'([^']+)'/)?.[1];
-                if (imgSrc) {
+                const onclickAttr = overlay.getAttribute('onclick');
+                const match = onclickAttr?.match(/'([^']+)'/);
+                if (match) {
+                    const imgSrc = match[1];
                     galleryImages.push(imgSrc);
+                    galleryData.push({
+                        src: imgSrc,
+                        id: card.dataset.id,
+                        name: img?.alt || 'Изображение',
+                        index: index
+                    });
                 }
             }
         });
+
+        // Предзагрузка соседних изображений
+        function preloadImages(currentIndex) {
+            const preloadIndexes = [currentIndex - 1, currentIndex + 1];
+            preloadIndexes.forEach(idx => {
+                if (idx >= 0 && idx < galleryImages.length) {
+                    const img = new Image();
+                    img.src = galleryImages[idx];
+                }
+            });
+        }
 
         // Эффект скролла для хедера
         const header = document.querySelector('header');
@@ -1936,6 +2381,107 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
             }
             lastScroll = currentScroll;
         }, { passive: true });
+
+        // ===== МУЛЬТИВЫБОР =====
+        function toggleSelectMode() {
+            isSelectMode = !isSelectMode;
+            const btn = document.getElementById('selectModeBtn');
+            const gallery = document.querySelector('.gallery-grid');
+
+            if (isSelectMode) {
+                btn.classList.add('active');
+                btn.innerHTML = '<i class="fas fa-times"></i> <span>Отмена</span>';
+                gallery.classList.add('select-mode');
+            } else {
+                btn.classList.remove('active');
+                btn.innerHTML = '<i class="fas fa-check-double"></i> <span>Выбрать</span>';
+                gallery.classList.remove('select-mode');
+                deselectAllPhotos();
+            }
+        }
+
+        function handleCardClick(event, imgSrc, photoId) {
+            if (isSelectMode) {
+                event.stopPropagation();
+                togglePhotoSelection(photoId);
+            } else {
+                openLightbox(imgSrc);
+            }
+        }
+
+        function togglePhotoSelection(photoId) {
+            const card = document.querySelector(`.card[data-id="${photoId}"]`);
+            if (selectedPhotos.has(photoId)) {
+                selectedPhotos.delete(photoId);
+                card.classList.remove('selected');
+            } else {
+                selectedPhotos.add(photoId);
+                card.classList.add('selected');
+            }
+            updateBulkActionsPanel();
+        }
+
+        function updateBulkActionsPanel() {
+            const panel = document.getElementById('bulkActions');
+            const countEl = document.getElementById('selectedCount');
+            countEl.textContent = selectedPhotos.size;
+
+            if (selectedPhotos.size > 0) {
+                panel.classList.add('visible');
+            } else {
+                panel.classList.remove('visible');
+            }
+        }
+
+        function selectAllPhotos() {
+            document.querySelectorAll('.card[data-id]').forEach(card => {
+                const id = parseInt(card.dataset.id);
+                selectedPhotos.add(id);
+                card.classList.add('selected');
+            });
+            updateBulkActionsPanel();
+        }
+
+        function deselectAllPhotos() {
+            selectedPhotos.clear();
+            document.querySelectorAll('.card.selected').forEach(card => {
+                card.classList.remove('selected');
+            });
+            updateBulkActionsPanel();
+        }
+
+        function deleteSelectedPhotos() {
+            if (selectedPhotos.size === 0) return;
+
+            const count = selectedPhotos.size;
+            if (!confirm(`Удалить ${count} фото? Это действие нельзя отменить.`)) return;
+
+            const ids = Array.from(selectedPhotos);
+            let deleted = 0;
+
+            // Анимация удаления карточек
+            ids.forEach(id => {
+                const card = document.querySelector(`.card[data-id="${id}"]`);
+                if (card) {
+                    card.classList.add('deleting');
+                }
+            });
+
+            // Удаление через AJAX
+            ids.forEach((id, index) => {
+                fetch(`?action=delete&id=${id}&token=<?= $_SESSION['csrf_token'] ?>`, {
+                    method: 'GET'
+                }).then(response => {
+                    deleted++;
+                    if (deleted === ids.length) {
+                        showToast(`Удалено ${count} фото`, 'success');
+                        setTimeout(() => window.location.reload(), 800);
+                    }
+                }).catch(err => {
+                    showToast('Ошибка при удалении', 'error');
+                });
+            });
+        }
 
         dropZone.onclick = () => fileInput.click();
 
@@ -2013,13 +2559,33 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
             const img = document.getElementById('lb-img');
             const download = document.getElementById('lb-download');
             const counter = document.getElementById('lb-counter');
+            const filenameEl = document.getElementById('lb-filename');
+            const dimensionsEl = document.getElementById('lb-dimensions');
 
             // Найти индекс изображения
             currentImageIndex = galleryImages.indexOf(src);
             if (currentImageIndex === -1) currentImageIndex = 0;
 
-            img.src = src;
-            download.href = src;
+            // Показать прелоадер
+            lb.classList.add('loading');
+
+            // Загрузить изображение
+            const tempImg = new Image();
+            tempImg.onload = function() {
+                img.src = src;
+                download.href = src;
+                lb.classList.remove('loading');
+
+                // Показать информацию о фото
+                if (galleryData[currentImageIndex]) {
+                    filenameEl.textContent = galleryData[currentImageIndex].name;
+                }
+                dimensionsEl.textContent = `${this.naturalWidth} × ${this.naturalHeight}`;
+
+                // Предзагрузка соседних
+                preloadImages(currentImageIndex);
+            };
+            tempImg.src = src;
 
             // Обновить счётчик
             if (galleryImages.length > 0) {
@@ -2029,6 +2595,9 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
                 counter.style.display = 'none';
             }
 
+            // Сбросить зум
+            resetZoom();
+
             lb.style.display = 'flex';
             requestAnimationFrame(() => lb.classList.add('visible'));
             document.body.style.overflow = 'hidden';
@@ -2037,6 +2606,8 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
         function closeLightbox() {
             const lb = document.getElementById('lightbox');
             lb.classList.remove('visible');
+            lb.classList.remove('zoomed');
+            resetZoom();
             setTimeout(() => {
                 lb.style.display = 'none';
                 document.getElementById('lb-img').src = '';
@@ -2044,38 +2615,165 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
             }, 400);
         }
 
+        function handleLightboxClick(event) {
+            if (isZoomed) {
+                // В режиме зума клик по фону закрывает зум
+                if (event.target.id === 'lightbox') {
+                    toggleZoom();
+                }
+            } else {
+                closeLightbox();
+            }
+        }
+
         function navigateLightbox(direction) {
-            if (galleryImages.length === 0) return;
+            if (galleryImages.length === 0 || isZoomed) return;
 
             currentImageIndex += direction;
             if (currentImageIndex < 0) currentImageIndex = galleryImages.length - 1;
             if (currentImageIndex >= galleryImages.length) currentImageIndex = 0;
 
+            const lb = document.getElementById('lightbox');
             const img = document.getElementById('lb-img');
             const download = document.getElementById('lb-download');
             const counter = document.getElementById('lb-counter');
+            const filenameEl = document.getElementById('lb-filename');
+            const dimensionsEl = document.getElementById('lb-dimensions');
 
             // Анимация смены изображения
             img.style.opacity = '0';
             img.style.transform = direction > 0 ? 'translateX(30px)' : 'translateX(-30px)';
 
-            setTimeout(() => {
-                img.src = galleryImages[currentImageIndex];
-                download.href = galleryImages[currentImageIndex];
-                counter.textContent = `${currentImageIndex + 1} / ${galleryImages.length}`;
+            // Показать прелоадер
+            lb.classList.add('loading');
 
-                img.style.transform = direction > 0 ? 'translateX(-30px)' : 'translateX(30px)';
-                requestAnimationFrame(() => {
-                    img.style.transition = 'all 0.3s ease';
-                    img.style.opacity = '1';
-                    img.style.transform = 'translateX(0)';
-                });
+            setTimeout(() => {
+                const tempImg = new Image();
+                tempImg.onload = function() {
+                    img.src = galleryImages[currentImageIndex];
+                    download.href = galleryImages[currentImageIndex];
+                    counter.textContent = `${currentImageIndex + 1} / ${galleryImages.length}`;
+                    lb.classList.remove('loading');
+
+                    // Обновить информацию
+                    if (galleryData[currentImageIndex]) {
+                        filenameEl.textContent = galleryData[currentImageIndex].name;
+                    }
+                    dimensionsEl.textContent = `${this.naturalWidth} × ${this.naturalHeight}`;
+
+                    img.style.transform = direction > 0 ? 'translateX(-30px)' : 'translateX(30px)';
+                    requestAnimationFrame(() => {
+                        img.style.transition = 'all 0.3s ease';
+                        img.style.opacity = '1';
+                        img.style.transform = 'translateX(0)';
+                    });
+
+                    // Предзагрузка соседних
+                    preloadImages(currentImageIndex);
+                };
+                tempImg.src = galleryImages[currentImageIndex];
             }, 200);
 
             setTimeout(() => {
                 img.style.transition = '';
             }, 500);
         }
+
+        // ===== ЗУМ =====
+        function toggleZoom() {
+            const lb = document.getElementById('lightbox');
+            const img = document.getElementById('lb-img');
+            const zoomIcon = document.getElementById('zoom-icon');
+
+            if (isZoomed) {
+                resetZoom();
+                lb.classList.remove('zoomed');
+                img.classList.remove('zoomed');
+                zoomIcon.className = 'fas fa-search-plus';
+            } else {
+                isZoomed = true;
+                zoomLevel = 2;
+                lb.classList.add('zoomed');
+                img.classList.add('zoomed');
+                img.style.transform = `scale(${zoomLevel})`;
+                zoomIcon.className = 'fas fa-search-minus';
+            }
+        }
+
+        function resetZoom() {
+            isZoomed = false;
+            zoomLevel = 1;
+            panX = 0;
+            panY = 0;
+            const img = document.getElementById('lb-img');
+            if (img) {
+                img.style.transform = '';
+                img.classList.remove('zoomed');
+            }
+            const zoomIcon = document.getElementById('zoom-icon');
+            if (zoomIcon) {
+                zoomIcon.className = 'fas fa-search-plus';
+            }
+        }
+
+        // Зум колёсиком мыши
+        document.getElementById('lightbox').addEventListener('wheel', (e) => {
+            if (document.getElementById('lightbox').style.display !== 'flex') return;
+            e.preventDefault();
+
+            const img = document.getElementById('lb-img');
+            const lb = document.getElementById('lightbox');
+
+            if (e.deltaY < 0) {
+                // Увеличение
+                if (zoomLevel < 4) {
+                    zoomLevel = Math.min(4, zoomLevel + 0.5);
+                    isZoomed = true;
+                    lb.classList.add('zoomed');
+                    img.classList.add('zoomed');
+                }
+            } else {
+                // Уменьшение
+                if (zoomLevel > 1) {
+                    zoomLevel = Math.max(1, zoomLevel - 0.5);
+                    if (zoomLevel === 1) {
+                        resetZoom();
+                        lb.classList.remove('zoomed');
+                        return;
+                    }
+                }
+            }
+
+            img.style.transform = `scale(${zoomLevel}) translate(${panX}px, ${panY}px)`;
+            document.getElementById('zoom-icon').className = zoomLevel > 1 ? 'fas fa-search-minus' : 'fas fa-search-plus';
+        }, { passive: false });
+
+        // Перетаскивание изображения в режиме зума
+        const lbImg = document.getElementById('lb-img');
+
+        lbImg.addEventListener('mousedown', (e) => {
+            if (!isZoomed) return;
+            isDragging = true;
+            dragStartX = e.clientX - panX;
+            dragStartY = e.clientY - panY;
+            lbImg.style.cursor = 'grabbing';
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging || !isZoomed) return;
+            panX = e.clientX - dragStartX;
+            panY = e.clientY - dragStartY;
+            lbImg.style.transform = `scale(${zoomLevel}) translate(${panX}px, ${panY}px)`;
+        });
+
+        document.addEventListener('mouseup', () => {
+            if (isDragging) {
+                isDragging = false;
+                if (isZoomed) {
+                    lbImg.style.cursor = 'grab';
+                }
+            }
+        });
 
         function openShareModal(url, name) {
             const escapeHtml = (text) => text.replace(/[&<>"']/g, (m) => ({
@@ -2153,21 +2851,69 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
             const isLightboxOpen = lb.style.display === 'flex';
 
             if (e.key === 'Escape') {
-                closeLightbox();
+                if (isZoomed) {
+                    toggleZoom();
+                } else if (isLightboxOpen) {
+                    closeLightbox();
+                } else if (isSelectMode) {
+                    toggleSelectMode();
+                }
                 closeShareModal();
             }
 
             if (isLightboxOpen) {
-                if (e.key === 'ArrowLeft') {
+                if (e.key === 'ArrowLeft' && !isZoomed) {
                     e.preventDefault();
                     navigateLightbox(-1);
-                } else if (e.key === 'ArrowRight') {
+                } else if (e.key === 'ArrowRight' && !isZoomed) {
                     e.preventDefault();
                     navigateLightbox(1);
-                } else if (e.key === ' ') {
+                } else if (e.key === ' ' && !isZoomed) {
                     e.preventDefault();
                     navigateLightbox(1);
+                } else if (e.key === 'z' || e.key === 'Z' || e.key === 'я' || e.key === 'Я') {
+                    e.preventDefault();
+                    toggleZoom();
+                } else if (e.key === 'd' || e.key === 'D' || e.key === 'в' || e.key === 'В') {
+                    e.preventDefault();
+                    document.getElementById('lb-download').click();
+                } else if (e.key === '+' || e.key === '=') {
+                    e.preventDefault();
+                    if (zoomLevel < 4) {
+                        zoomLevel = Math.min(4, zoomLevel + 0.5);
+                        isZoomed = true;
+                        lb.classList.add('zoomed');
+                        document.getElementById('lb-img').classList.add('zoomed');
+                        document.getElementById('lb-img').style.transform = `scale(${zoomLevel})`;
+                        document.getElementById('zoom-icon').className = 'fas fa-search-minus';
+                    }
+                } else if (e.key === '-' || e.key === '_') {
+                    e.preventDefault();
+                    if (zoomLevel > 1) {
+                        zoomLevel = Math.max(1, zoomLevel - 0.5);
+                        if (zoomLevel === 1) {
+                            resetZoom();
+                            lb.classList.remove('zoomed');
+                        } else {
+                            document.getElementById('lb-img').style.transform = `scale(${zoomLevel})`;
+                        }
+                    }
                 }
+            }
+
+            // Горячая клавиша для режима выбора (S)
+            if (!isLightboxOpen && (e.key === 's' || e.key === 'S' || e.key === 'ы' || e.key === 'Ы') && !e.ctrlKey && !e.metaKey) {
+                const selectBtn = document.getElementById('selectModeBtn');
+                if (selectBtn && document.activeElement.tagName !== 'INPUT') {
+                    e.preventDefault();
+                    toggleSelectMode();
+                }
+            }
+
+            // Удаление выбранных (Delete)
+            if (isSelectMode && selectedPhotos.size > 0 && e.key === 'Delete') {
+                e.preventDefault();
+                deleteSelectedPhotos();
             }
         };
 
@@ -2280,6 +3026,144 @@ $storagePercent = min(100, round(($totalSizeBytes / MAX_STORAGE_PER_USER) * 100)
             }
         `;
         document.head.appendChild(style);
+
+        // Анимация счётчиков при загрузке
+        function animateCounters() {
+            document.querySelectorAll('.stat-val').forEach(el => {
+                const finalValue = el.textContent;
+                const isNumber = /^\d+$/.test(finalValue);
+
+                if (isNumber) {
+                    const target = parseInt(finalValue);
+                    let current = 0;
+                    const duration = 1000;
+                    const step = target / (duration / 16);
+
+                    const animate = () => {
+                        current += step;
+                        if (current < target) {
+                            el.textContent = Math.floor(current);
+                            requestAnimationFrame(animate);
+                        } else {
+                            el.textContent = target;
+                        }
+                    };
+                    animate();
+                }
+            });
+        }
+
+        // Запуск анимации при загрузке страницы
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(animateCounters, 300);
+        });
+
+        // Параллакс эффект для фона (мягкий)
+        let ticking = false;
+        window.addEventListener('mousemove', (e) => {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    const x = (e.clientX / window.innerWidth - 0.5) * 20;
+                    const y = (e.clientY / window.innerHeight - 0.5) * 20;
+                    document.body.style.backgroundPosition = `
+                        ${50 + x * 0.5}% ${y * 0.5}%,
+                        ${50 - x * 0.3}% ${y * 0.3}%,
+                        ${50 + x * 0.2}% ${50 + y * 0.2}%,
+                        ${50 - x * 0.4}% ${100 + y * 0.4}%
+                    `;
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        });
+
+        // Подсветка карточки при наведении на соседние
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', (e) => {
+                cards.forEach(c => {
+                    if (c !== card) {
+                        c.style.opacity = '0.7';
+                        c.style.transform = 'scale(0.98)';
+                    }
+                });
+            });
+            card.addEventListener('mouseleave', () => {
+                cards.forEach(c => {
+                    c.style.opacity = '';
+                    c.style.transform = '';
+                });
+            });
+        });
+
+        // Эффект пульсации при копировании
+        function addPulseEffect(element) {
+            const pulse = document.createElement('div');
+            pulse.style.cssText = `
+                position: absolute;
+                inset: 0;
+                border-radius: inherit;
+                background: rgba(52, 211, 153, 0.3);
+                animation: pulseEffect 0.5s ease-out;
+                pointer-events: none;
+            `;
+            element.style.position = 'relative';
+            element.appendChild(pulse);
+            setTimeout(() => pulse.remove(), 500);
+        }
+
+        // Добавить стиль для пульсации
+        const pulseStyle = document.createElement('style');
+        pulseStyle.textContent = `
+            @keyframes pulseEffect {
+                0% { transform: scale(0.95); opacity: 1; }
+                100% { transform: scale(1.05); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(pulseStyle);
+
+        // Улучшенный showToast с анимацией
+        const originalShowToast = showToast;
+        showToast = function(msg, type) {
+            originalShowToast(msg, type);
+            const toast = document.getElementById('toast');
+            if (type === 'success') {
+                toast.style.animation = 'toastSuccess 0.5s ease';
+                setTimeout(() => toast.style.animation = '', 500);
+            }
+        };
+
+        // Добавить анимацию успешного тоста
+        const toastStyle = document.createElement('style');
+        toastStyle.textContent = `
+            @keyframes toastSuccess {
+                0%, 100% { transform: translateX(-50%) translateY(0) scale(1); }
+                50% { transform: translateX(-50%) translateY(-5px) scale(1.02); }
+            }
+        `;
+        document.head.appendChild(toastStyle);
+
+        // Индикатор загрузки страницы
+        window.addEventListener('beforeunload', () => {
+            document.body.style.opacity = '0.5';
+            document.body.style.transition = 'opacity 0.3s ease';
+        });
+
+        // Восстановление прозрачности при возврате
+        window.addEventListener('pageshow', (e) => {
+            if (e.persisted) {
+                document.body.style.opacity = '1';
+            }
+        });
+
+        console.log('%c📸 PhotoHost Gallery', 'font-size: 24px; font-weight: bold; color: #818cf8;');
+        console.log('%cУправление:', 'font-weight: bold; color: #22d3ee;');
+        console.log('← → - навигация по фото');
+        console.log('Z - увеличить/уменьшить');
+        console.log('D - скачать');
+        console.log('S - режим выбора');
+        console.log('+/- - зум');
+        console.log('Esc - закрыть/отмена');
     </script>
 </body>
 </html>

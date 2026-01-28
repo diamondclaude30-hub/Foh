@@ -578,9 +578,158 @@ if (empty($_SESSION['csrf_token'])) {
             background: var(--primary);
             color: white;
         }
+
+        /* Плавающие частицы на фоне */
+        .particles {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: floatParticle 20s linear infinite;
+        }
+
+        .particle:nth-child(2n) {
+            background: var(--cyan);
+            animation-duration: 25s;
+        }
+
+        .particle:nth-child(3n) {
+            background: var(--accent);
+            animation-duration: 22s;
+        }
+
+        @keyframes floatParticle {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Состояние загрузки кнопки */
+        .btn.loading {
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .btn.loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            right: 16px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Подсказка силы пароля */
+        .password-strength {
+            margin-top: 8px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 99px;
+            overflow: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .password-strength.visible {
+            opacity: 1;
+        }
+
+        .password-strength-fill {
+            height: 100%;
+            border-radius: 99px;
+            transition: all 0.3s ease;
+            width: 0%;
+        }
+
+        .password-strength-fill.weak {
+            width: 33%;
+            background: var(--error);
+        }
+
+        .password-strength-fill.medium {
+            width: 66%;
+            background: #fbbf24;
+        }
+
+        .password-strength-fill.strong {
+            width: 100%;
+            background: var(--success);
+        }
+
+        .password-hint {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .password-hint.visible {
+            opacity: 1;
+        }
+
+        .password-hint i {
+            font-size: 0.7rem;
+        }
+
+        .password-hint.weak { color: var(--error); }
+        .password-hint.medium { color: #fbbf24; }
+        .password-hint.strong { color: var(--success); }
+
+        /* Показать/скрыть пароль */
+        .toggle-password {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 4px;
+            transition: color 0.3s ease;
+        }
+
+        .toggle-password:hover {
+            color: var(--text-sec);
+        }
     </style>
 </head>
 <body>
+
+<!-- Частицы на фоне -->
+<div class="particles" id="particles"></div>
 
 <div class="main-content">
     <div class="auth-container">
@@ -616,11 +765,14 @@ if (empty($_SESSION['csrf_token'])) {
                         <label>Пароль</label>
                         <div class="input-wrapper">
                             <i class="fas fa-lock icon"></i>
-                            <input type="password" name="password" required autocomplete="current-password" placeholder="Введите пароль">
+                            <input type="password" name="password" id="loginPassword" required autocomplete="current-password" placeholder="Введите пароль">
+                            <button type="button" class="toggle-password" onclick="togglePassword('loginPassword', this)">
+                                <i class="fas fa-eye"></i>
+                            </button>
                         </div>
                     </div>
 
-                    <button type="submit" class="btn">
+                    <button type="submit" class="btn" id="loginBtn">
                         <i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i>
                         Войти
                     </button>
@@ -648,11 +800,21 @@ if (empty($_SESSION['csrf_token'])) {
                         <label>Придумайте пароль</label>
                         <div class="input-wrapper">
                             <i class="fas fa-key icon"></i>
-                            <input type="password" name="password" required minlength="6" placeholder="Минимум 6 символов">
+                            <input type="password" name="password" id="registerPassword" required minlength="6" placeholder="Минимум 6 символов" oninput="checkPasswordStrength(this.value)">
+                            <button type="button" class="toggle-password" onclick="togglePassword('registerPassword', this)">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="password-strength" id="passwordStrength">
+                            <div class="password-strength-fill" id="passwordStrengthFill"></div>
+                        </div>
+                        <div class="password-hint" id="passwordHint">
+                            <i class="fas fa-info-circle"></i>
+                            <span id="passwordHintText">Минимум 6 символов</span>
                         </div>
                     </div>
 
-                    <button type="submit" class="btn">
+                    <button type="submit" class="btn" id="registerBtn">
                         <i class="fas fa-user-check" style="margin-right: 8px;"></i>
                         Создать аккаунт
                     </button>
@@ -750,6 +912,105 @@ if (empty($_SESSION['csrf_token'])) {
     if (visibleForm) {
         visibleForm.focus();
     }
+
+    // Генерация частиц
+    function createParticles() {
+        const container = document.getElementById('particles');
+        const particleCount = 15;
+
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 20 + 's';
+            particle.style.width = (2 + Math.random() * 4) + 'px';
+            particle.style.height = particle.style.width;
+            container.appendChild(particle);
+        }
+    }
+    createParticles();
+
+    // Показать/скрыть пароль
+    function togglePassword(inputId, btn) {
+        const input = document.getElementById(inputId);
+        const icon = btn.querySelector('i');
+
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.className = 'fas fa-eye-slash';
+        } else {
+            input.type = 'password';
+            icon.className = 'fas fa-eye';
+        }
+    }
+
+    // Проверка силы пароля
+    function checkPasswordStrength(password) {
+        const strengthBar = document.getElementById('passwordStrength');
+        const strengthFill = document.getElementById('passwordStrengthFill');
+        const hint = document.getElementById('passwordHint');
+        const hintText = document.getElementById('passwordHintText');
+
+        if (password.length === 0) {
+            strengthBar.classList.remove('visible');
+            hint.classList.remove('visible');
+            return;
+        }
+
+        strengthBar.classList.add('visible');
+        hint.classList.add('visible');
+
+        let strength = 0;
+        if (password.length >= 6) strength++;
+        if (password.length >= 10) strength++;
+        if (/[A-Z]/.test(password) && /[a-z]/.test(password)) strength++;
+        if (/\d/.test(password)) strength++;
+        if (/[^A-Za-z0-9]/.test(password)) strength++;
+
+        strengthFill.className = 'password-strength-fill';
+        hint.className = 'password-hint visible';
+
+        if (strength <= 2) {
+            strengthFill.classList.add('weak');
+            hint.classList.add('weak');
+            hintText.textContent = 'Слабый пароль';
+        } else if (strength <= 3) {
+            strengthFill.classList.add('medium');
+            hint.classList.add('medium');
+            hintText.textContent = 'Средний пароль';
+        } else {
+            strengthFill.classList.add('strong');
+            hint.classList.add('strong');
+            hintText.textContent = 'Надёжный пароль';
+        }
+    }
+
+    // Состояние загрузки при отправке формы
+    document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', function() {
+            const btn = this.querySelector('.btn');
+            btn.classList.add('loading');
+            btn.disabled = true;
+        });
+    });
+
+    // Эффект параллакса для фона
+    let ticking = false;
+    document.addEventListener('mousemove', (e) => {
+        if (!ticking) {
+            requestAnimationFrame(() => {
+                const x = (e.clientX / window.innerWidth - 0.5) * 30;
+                const y = (e.clientY / window.innerHeight - 0.5) * 30;
+                document.body.style.backgroundPosition = `
+                    ${x * 0.5}% ${y * 0.5}%,
+                    ${100 - x * 0.3}% ${100 - y * 0.3}%,
+                    ${50 + x * 0.2}% ${50 + y * 0.2}%
+                `;
+                ticking = false;
+            });
+            ticking = true;
+        }
+    });
 </script>
 
 </body>
